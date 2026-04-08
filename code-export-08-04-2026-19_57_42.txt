@@ -1,0 +1,90 @@
+patients[icon:user,color: blue]{
+  patient_id string pk
+  name string
+  age number
+  gender string
+  phone string
+  email string
+  address string
+}
+
+specializations [icon: activity, color: purple]{
+  specialization_id string pk
+  name string
+}
+
+doctors [icon: doctor, color: blue]{
+  doctor_id string pk
+  name string
+  phone string
+  experience_years number
+  specialization_id string
+}
+specializations.specialization_id < doctors.specialization_id
+
+appointments [icon: calendar, color: orange] {
+  appointment_id string pk
+  patient_id string
+  doctor_id string
+  appointment_date date
+  time_slot string
+  status string
+}
+
+patients.patient_id < appointments.patient_id
+doctors.doctor_id < appointments.doctor_id
+
+consultations [icon: file-text, color: green] {
+  consultation_id string pk
+  appointment_id string
+  patient_id string
+  doctor_id string
+  visit_date date
+  diagnosis string
+  notes string
+}
+
+appointments.appointment_id <> consultations.appointment_id
+patients.patient_id < consultations.patient_id
+doctors.doctor_id < consultations.doctor_id
+
+tests [icon: flask, color: red] {
+  test_id string pk
+  test_name string
+  cost number
+}
+
+consultation_tests [icon: link, color: red] {
+  consultation_test_id string pk
+  consultation_id string
+  test_id string
+  status string
+}
+
+consultations.consultation_id < consultation_tests.consultation_id
+tests.test_id < consultation_tests.test_id
+
+reports [icon: file, color: green] {
+  report_id string pk
+  consultation_test_id string
+  report_date date
+  result_summary string
+  file_url string
+}
+
+consultation_tests.consultation_test_id <> reports.consultation_test_id
+
+payments [icon: credit-card, color: yellow] {
+  payment_id string pk
+  patient_id string
+  appointment_id string
+  consultation_id string
+  amount number
+  payment_date date
+  payment_method string
+  status string
+}
+
+patients.patient_id < payments.patient_id
+appointments.appointment_id < payments.appointment_id
+consultations.consultation_id < payments.consultation_id
